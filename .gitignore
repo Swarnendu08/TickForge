@@ -1,0 +1,11 @@
+# C/C++ build artifacts
+*.o
+*.a
+*.so
+*.dylib
+tickforge
+build/
+
+# IDE and OS files
+.DS_Store
+.vscode/

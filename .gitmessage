@@ -1,0 +1,19 @@
+# Replace the angle-bracketed prompts before committing.
+# Use a type such as feature, bugfix, refactor, docs, test, performance, or chore.
+
+<type>: <short summary>
+
+Owner module:
+<module responsible for the change>
+
+Purpose:
+<why this change is needed>
+
+Performance impact:
+<None | negligible | improved | regression | not measured> — <short explanation>
+
+Testing:
+<tests performed>
+
+Related issue:
+#<issue-number, or full GitHub issue URL>
