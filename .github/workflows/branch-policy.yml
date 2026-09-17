@@ -1,0 +1,35 @@
+name: Branch policy
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-branch-names:
+    # Fork branches are allowed to use their own naming conventions.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate branch names and targets
+        env:
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$BASE_BRANCH" =~ ^main$|^feature/[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)*$ ]]; then
+            echo "Invalid target branch: $BASE_BRANCH"
+            echo "PRs must target main or a retained feature branch (feature/<capability>[/<subfeature>])."
+            exit 1
+          fi
+
+          if [[ ! "$HEAD_BRANCH" =~ ^feature/[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)*$|^contrib/[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*$ ]]; then
+            echo "Invalid source branch: $HEAD_BRANCH"
+            echo "Use feature/<capability>[/<subfeature>] for retained branches or contrib/<owner>/<topic> for temporary contributor branches."
+            exit 1
+          fi
